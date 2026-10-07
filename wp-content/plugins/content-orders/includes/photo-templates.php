@@ -87,8 +87,8 @@ function co_render_wanted($photo_path, $name, $crime, $reward, $width = 1200, $p
         co_draw_centered($im, $cx, $y, $u(54), $bold, $dark, $line);
         $y += $u(68);
     }
-    co_draw_centered($im, $cx, $u(1560), $u(30), $reg, $brown, 'NAGRODA', 0, $u(6));
-    co_draw_centered($im, $cx, $u(1625), $u(58), $bold, $dark, $reward, $u(980));
+    co_draw_centered($im, $cx, $u(1545), $u(30), $reg, $brown, 'NAGRODA', 0, $u(6));
+    co_draw_centered($im, $cx, $u(1630), $u(58), $bold, $dark, $reward, $u(980));
     co_draw_centered($im, $cx, $u(1695), $u(24), $reg, $brown, 'FIKCYJNY DOKUMENT · ŻART · NIE JEST PISMEM URZĘDOWYM', $u(960), $u(2));
 
     if ($preview) {

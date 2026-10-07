@@ -82,7 +82,7 @@ function co_run_setup(array $d) {
     $instr .= '. W tytule wpisz numer zamówienia. Realizacja rozpoczyna się po zaksięgowaniu płatności.';
     update_option('woocommerce_bacs_settings', [
         'enabled' => 'yes',
-        'title' => $d['blik'] ? 'Przelew / BLIK na telefon' : 'Przelew bankowy',
+        'title' => $d['blik'] ? 'Przelew / BLIK na telefon' : 'Przelew tradycyjny',
         'description' => 'Płatność tradycyjnym przelewem' . ($d['blik'] ? ' lub BLIK-iem na telefon.' : '.'),
         'instructions' => $instr,
         'account_details' => '',

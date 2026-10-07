@@ -1,5 +1,6 @@
 <?php if (!defined('ABSPATH')) exit; ?>
 <footer class="site-footer"><div class="wrap">
+  <div class="brand"><?php bloginfo('name'); ?></div>
   <?php if (has_nav_menu('footer')) wp_nav_menu(['theme_location' => 'footer', 'container' => false]); ?>
   <div>&copy; <?php echo esc_html(date('Y')); ?> <?php bloginfo('name'); ?></div>
   <?php $seller = get_theme_mod('dedykowana_seller'); if ($seller) : ?>

@@ -10,11 +10,7 @@
 <header class="site-header"><div class="wrap">
   <a class="site-title" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
   <nav class="site-nav" aria-label="Menu główne">
-    <?php
-    if (has_nav_menu('primary')) {
-        wp_nav_menu(['theme_location' => 'primary', 'container' => false]);
-    }
-    ?>
+    <?php if (has_nav_menu('primary')) wp_nav_menu(['theme_location' => 'primary', 'container' => false]); ?>
   </nav>
   <?php if (function_exists('wc_get_cart_url')) : ?>
     <a class="cart-link" href="<?php echo esc_url(wc_get_cart_url()); ?>">Koszyk (<?php echo (int) WC()->cart->get_cart_contents_count(); ?>)</a>

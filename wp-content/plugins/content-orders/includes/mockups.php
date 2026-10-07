@@ -56,7 +56,7 @@ function co_mockup($jpeg, $size = 1200, $fill = 0.8) {
     imageantialias($im, true);
     for ($y = 0; $y < $size; $y++) {
         $t = $y / $size;
-        imageline($im, 0, $y, $size, $y, imagecolorallocate($im, (int) (247 - 12 * $t), (int) (245 - 12 * $t), (int) (255 - 10 * $t)));
+        imageline($im, 0, $y, $size, $y, imagecolorallocate($im, (int) (255 - 12 * $t), (int) (248 - 15 * $t), (int) (227 - 20 * $t)));
     }
     // cień liczony analitycznie na małej warstwie, potem skalowany
     $q = 4; $sz = (int) ($size / $q);
@@ -69,7 +69,7 @@ function co_mockup($jpeg, $size = 1200, $fill = 0.8) {
             $fx = 1 / (1 + exp((abs($x - $cx) - $hx) / $sg));
             $fy = 1 / (1 + exp((abs($y - $cy) - $hy) / $sg));
             $a = (int) round(127 - 127 * 0.38 * $fx * $fy);
-            imagesetpixel($sh_l, $x, $y, imagecolorallocatealpha($sh_l, 40, 30, 80, max(0, min(127, $a))));
+            imagesetpixel($sh_l, $x, $y, imagecolorallocatealpha($sh_l, 60, 45, 20, max(0, min(127, $a))));
         }
     }
     imagealphablending($im, true);

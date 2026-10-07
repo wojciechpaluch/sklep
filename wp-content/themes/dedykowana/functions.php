@@ -42,3 +42,29 @@ add_action('init', function () {
     update_option('woocommerce_checkout_terms_and_conditions_checkbox_text', 'Zapoznałem/am się z [terms] i akceptuję jego treść.');
     update_option('woocommerce_enable_coupons', 'no');
 });
+
+/* Strona produktu: "Co dostajesz" i informacje o humorze oraz zwrotach */
+function dedykowana_product_includes($gen) {
+    $m = [
+        'diploma' => ['Dyplom w PDF do wydruku', 'Wybrany tytuł i uzasadnienie (własne albo wymyślone)', 'Opcjonalne zdjęcie na pieczęci', 'Jedna bezpłatna poprawka tekstu'],
+        'ai_poem' => ['Wierszyk z imieniem, napisany pod Twoje szczegóły', 'Dostawa na e-mail do 48 godzin', 'Jedna bezpłatna poprawka tekstu'],
+        'pet_card' => ['Legitymację zwierzaka ze zdjęciem w pliku JPG', 'Imię, gatunek i stanowisko ze śmiesznego zestawu', 'Jedna bezpłatna poprawka tekstu'],
+        'wanted' => ['List gończy ze zdjęciem zwierzaka w pliku JPG', 'Wybrane przewinienie i nagroda', 'Wyraźny dopisek, że to żart'],
+        'trading_card' => ['Kartę kolekcjonerską ze zdjęciem w pliku JPG', 'Żywioł, atak specjalny i statystyki', 'Jedna bezpłatna poprawka tekstu'],
+        'pixel_pet' => ['Ekran postaci z gry 2D w pliku PNG (1200 × 1200)', 'Zwierzak w pikselach, poziom, paski HP i siły, ekwipunek', 'Klasa i umiejętność specjalna do wyboru', 'Najlepiej wychodzi zdjęcie z całą głową i spokojnym tłem'],
+    ];
+    return $m[$gen] ?? ['Plik cyfrowy na e-mail po zaksięgowaniu płatności', 'Jedna bezpłatna poprawka'];
+}
+add_action('woocommerce_after_single_product_summary', function () {
+    global $product; if (!$product) return;
+    $gen = get_post_meta($product->get_id(), '_co_generator', true);
+    $terms = function_exists('wc_terms_and_conditions_page_id') ? get_permalink(wc_terms_and_conditions_page_id()) : '#';
+    echo '<div class="co-extra"><div class="box"><h3>Co dostajesz</h3><ul>';
+    foreach (dedykowana_product_includes($gen) as $li) echo '<li>' . esc_html($li) . '</li>';
+    echo '</ul></div><div class="stack"><div class="box"><h3>Humor, nie dokument</h3><p>Treści i tytuły są wymyślone dla zabawy. Produkt nie udaje żadnego prawdziwego dokumentu ani instytucji.</p></div>';
+    echo '<div class="box"><h3>Zwroty i reklamacje</h3><p>To produkt robiony specjalnie dla Ciebie, więc po rozpoczęciu realizacji nie można od umowy odstąpić. Jeśli jest literówka albo zły plik, poprawiamy to. <a href="' . esc_url($terms) . '">Pełne zasady</a></p></div></div></div>';
+}, 5);
+add_filter('gettext', function ($t, $orig, $domain) {
+    if ($domain === 'woocommerce' && $t === 'Podobne produkty') return 'Inne produkty';
+    return $t;
+}, 11, 3);
