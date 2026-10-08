@@ -29,4 +29,5 @@ require_once CO_DIR . 'includes/sources.php';
 require_once CO_DIR . 'includes/legal.php';
 require_once CO_DIR . 'includes/setup.php';
 require_once CO_DIR . 'includes/payment.php';
+require_once CO_DIR . 'includes/hero.php';
 require_once CO_DIR . 'includes/settings.php';

@@ -15,8 +15,8 @@ $from   = $price ? wc_price($price[0]->get_price()) : '';
     <?php if ($from) : ?><div class="note">Od <?php echo wp_kses_post($from); ?> · gotowe po zaksięgowaniu wpłaty</div><?php endif; ?>
   </div>
   <div class="hero-tiles" aria-hidden="true">
-    <div class="tile before"><?php if ($before) echo wp_get_attachment_image($before, 'large'); ?><span>Zdjęcie</span></div>
-    <div class="tile after"><?php if ($after) echo wp_get_attachment_image($after, 'large'); ?><span>Postać z gry 2D</span></div>
+    <div class="tile before"><?php if ($before) echo wp_get_attachment_image($before, 'large'); ?><span><?php echo esc_html(get_theme_mod('dedykowana_cap_before', 'Zdjęcie')); ?></span></div>
+    <div class="tile after"><?php if ($after) echo wp_get_attachment_image($after, 'large'); ?><span><?php echo esc_html(get_theme_mod('dedykowana_cap_after', 'Postać z gry 2D')); ?></span></div>
   </div>
 </div></section>
 
