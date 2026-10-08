@@ -55,6 +55,7 @@ function co_sample_image($product_id, $filename, $jpeg, $title) {
     $up = wp_upload_bits($filename, null, $jpeg);
     if (!empty($up['error'])) return 0;
     $att = wp_insert_attachment(['post_mime_type' => 'image/jpeg', 'post_title' => $title, 'post_status' => 'inherit'], $up['file'], $product_id);
+    update_post_meta($att, '_wp_attachment_image_alt', $title);
     require_once ABSPATH . 'wp-admin/includes/image.php';
     wp_update_attachment_metadata($att, wp_generate_attachment_metadata($att, $up['file']));
     return $att;

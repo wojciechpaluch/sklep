@@ -83,25 +83,45 @@ function co_mockup($jpeg, $size = 1200, $fill = 0.8) {
 }
 
 
-/* Przykładowa kartka z wierszykiem (obrazek do sklepu) */
-function co_render_sample_poem($w = 1200) {
+/* Przykładowa kartka z wierszykiem (obrazek do sklepu). Tekst napisany ręcznie dla Bruna, nie generowany automatycznie. */
+function co_example_poem() {
+    return [
+        'Bruno ma uszy jak złote firany',
+        'i oczy jak dwie czekoladki.',
+        'Pilnuje kanapy od rana do rana,',
+        'bo ktoś musi dbać o porządki.',
+        '',
+        'Gdy w kuchni cicho skrzypnie szafka,',
+        'Bruno zjawia się jak cień.',
+        'Udaje, że przechodził tędy,',
+        'a ogon macha cały dzień.',
+        '',
+        'Wszystkiego dobrego, Bruno złoty,',
+        'niech szynka nie zna końca roboty!',
+    ];
+}
+
+function co_render_sample_poem($w = 1200, $for = 'Bruna') {
     $bold = CO_DIR . 'fonts/DejaVuSerif-Bold.ttf'; $reg = CO_DIR . 'fonts/DejaVuSerif.ttf';
     $h = (int) ($w * 1.25);
     $im = imagecreatetruecolor($w, $h); imageantialias($im, true);
-    $paper = imagecolorallocate($im, 252, 247, 236); $ink = imagecolorallocate($im, 52, 40, 88); $acc = imagecolorallocate($im, 214, 90, 70); $mut = imagecolorallocate($im, 110, 100, 130);
+    $paper = imagecolorallocate($im, 252, 247, 236); $ink = imagecolorallocate($im, 60, 45, 90); $acc = imagecolorallocate($im, 229, 80, 63); $mut = imagecolorallocate($im, 110, 100, 130);
     imagefill($im, 0, 0, $paper);
     $t = max(3, (int) ($w * 0.008)); $m = (int) ($w * 0.05);
     imagefilledrectangle($im, $m, $m, $w - $m, $h - $m, $acc);
     imagefilledrectangle($im, $m + $t, $m + $t, $w - $m - $t, $h - $m - $t, $paper);
     $c = function ($txt, $y, $sz, $font, $col) use ($im, $w) { $b = imagettfbbox($sz, 0, $font, $txt); imagettftext($im, $sz, 0, (int) (($w - ($b[2] - $b[0])) / 2), $y, $col, $font, $txt); };
-    $c('Wierszyk', (int) ($h * 0.22), (int) ($w * 0.07), $bold, $ink);
-    $c('dla Marka', (int) ($h * 0.285), (int) ($w * 0.036), $reg, $mut);
-    imagefilledrectangle($im, (int) ($w * 0.42), (int) ($h * 0.32), (int) ($w * 0.58), (int) ($h * 0.32) + $t, $acc);
-    $y = (int) ($h * 0.42);
-    foreach (['Marek dziś ma urodziny,', 'tort już czeka, nie ma zmiłuj,', 'wszyscy życzą mu zdrowia,', 'a on tylko: „Daj mi kawałek!”'] as $l) {
-        $c($l, $y, (int) ($w * 0.034), $reg, $ink); $y += (int) ($h * 0.075);
+    $c('Wierszyk', (int) ($h * 0.16), (int) ($w * 0.07), $bold, $ink);
+    $c('dla ' . $for, (int) ($h * 0.21), (int) ($w * 0.036), $reg, $mut);
+    imagefilledrectangle($im, (int) ($w * 0.42), (int) ($h * 0.235), (int) ($w * 0.58), (int) ($h * 0.235) + $t, $acc);
+    $y = (int) ($h * 0.30); $step = (int) ($h * 0.046);
+    foreach (co_example_poem() as $l) {
+        if ($l === '') { $y += (int) ($step * 0.55); continue; }
+        $size = (int) ($w * 0.03);
+        while ($size > 10) { $bb = imagettfbbox($size, 0, $reg, $l); if (($bb[2] - $bb[0]) <= $w * 0.78) break; $size--; }
+        $c($l, $y, $size, $reg, $ink); $y += $step;
     }
-    $c('napisane specjalnie dla Ciebie', (int) ($h * 0.86), (int) ($w * 0.024), $reg, $mut);
+    $c('napisane specjalnie dla Ciebie', (int) ($h * 0.91), (int) ($w * 0.024), $reg, $mut);
     ob_start(); imagejpeg($im, null, 92); $j = ob_get_clean(); imagedestroy($im);
     return $j;
 }
@@ -112,12 +132,12 @@ function co_refresh_samples() {
     $products = get_option('co_products', []);
     $dog = co_sample_pet_photo_path();
     $jobs = [
-        'diploma' => function () use ($dog) { $t = 'Mistrz Spóźnialskich'; list($j) = co_render_diploma('Bruno', $t, co_diploma_titles()[$t], 1600, false, get_option('co_example_photo_file') ? $dog : null); return [$j, 'dyplom-przyklad.jpg', 'Przykładowy dyplom', 0.86]; },
-        'pet'     => function () use ($dog) { return [co_render_pet_card($dog, 'Bruno', 'Pies', co_pet_roles()[0], co_pet_default_trait('Pies'), 1400, false), 'legitymacja-przyklad.jpg', 'Przykładowa legitymacja zwierzaka', 0.86]; },
-        'poem'    => function () { return [co_render_sample_poem(1200), 'wierszyk-przyklad.jpg', 'Przykładowy wierszyk', 0.82]; },
-        'pixel'   => function () use ($dog) { return [co_render_pixel($dog, 'Bruno', co_pixel_classes()[0], co_pixel_skills()[0], 1200, false), 'pixel-przyklad.jpg', 'Przykładowa postać z gry 2D', 0.9]; },
-        'wanted'  => function () use ($dog) { return [co_render_wanted($dog, 'Bruno', co_wanted_crimes()[0], co_wanted_rewards()[0], 1000, false), 'list-goncz-przyklad.jpg', 'Przykładowy list gończy', 0.9]; },
-        'card'    => function () use ($dog) { return [co_render_card($dog, 'Bruno', 'Ogień', co_card_attacks()[0], 1000, false), 'karta-przyklad.jpg', 'Przykładowa karta kolekcjonerska', 0.9]; },
+        'diploma' => function () use ($dog) { $t = 'Mistrz Spóźnialskich'; list($j) = co_render_diploma('Bruno', $t, co_diploma_titles()[$t], 1600, false, get_option('co_example_photo_file') ? $dog : null); return [$j, 'dyplom-przyklad.jpg', 'Przykładowy dyplom dla Bruna, golden retrievera', 0.86]; },
+        'pet'     => function () use ($dog) { return [co_render_pet_card($dog, 'Bruno', 'Pies', co_pet_roles()[0], co_pet_default_trait('Pies'), 1400, false), 'legitymacja-przyklad.jpg', 'Przykładowa legitymacja zwierzaka: Bruno', 0.86]; },
+        'poem'    => function () { return [co_render_sample_poem(1200), 'wierszyk-przyklad.jpg', 'Przykładowy wierszyk dla Bruna', 0.9]; },
+        'pixel'   => function () use ($dog) { return [co_render_pixel($dog, 'Bruno', co_pixel_classes()[0], co_pixel_skills()[0], 1200, false), 'pixel-przyklad.jpg', 'Przykładowa postać z gry 2D: Bruno', 0.9]; },
+        'wanted'  => function () use ($dog) { return [co_render_wanted($dog, 'Bruno', co_wanted_crimes()[0], co_wanted_rewards()[0], 1000, false), 'list-goncz-przyklad.jpg', 'Przykładowy list gończy za Brunem', 0.9]; },
+        'card'    => function () use ($dog) { return [co_render_card($dog, 'Bruno', 'Ogień', co_card_attacks()[0], 1000, false), 'karta-przyklad.jpg', 'Przykładowa karta kolekcjonerska: Bruno', 0.9]; },
     ];
     foreach ($jobs as $key => $fn) {
         if (empty($products[$key])) continue;

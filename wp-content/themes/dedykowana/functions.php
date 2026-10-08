@@ -64,6 +64,9 @@ add_action('woocommerce_after_single_product_summary', function () {
     if ($before && in_array($gen, ['pet_card', 'trading_card', 'wanted', 'pixel_pet', 'diploma'], true) && $product->get_image_id()) {
         echo '<div class="box flow-box"><h3>Jak to powstaje</h3><div class="flow-mini"><figure>' . wp_get_attachment_image($before, 'medium') . '<figcaption>Zdjęcie</figcaption></figure><span aria-hidden="true">→</span><figure>' . wp_get_attachment_image($product->get_image_id(), 'medium') . '<figcaption>' . esc_html($product->get_name()) . '</figcaption></figure></div><p>' . ($gen === 'diploma' ? 'Zdjęcie jest opcjonalne i trafia na pieczęć dyplomu.' : 'Zdjęcie jest kadrowane przez Ciebie, a potem generowane automatycznie przez kod, bez AI.') . ' Przykład wykonany na zdjęciu poglądowym.</p></div>';
     }
+    if ($gen === 'ai_poem' && function_exists('co_example_poem')) {
+        echo '<div class="box flow-box"><h3>Przykład: wierszyk dla Bruna</h3><blockquote class="poem-ex">' . nl2br(esc_html(implode("\n", co_example_poem()))) . '</blockquote><p>Podajesz imię, okazję, ton i kilka szczegółów, a tekst powstaje pod Ciebie. Część wierszyków powstaje z pomocą narzędzi AI, ale zawsze sprawdzam je przed wysyłką.</p></div>';
+    }
     echo '<div class="box"><h3>Co dostajesz</h3><ul>';
     foreach (dedykowana_product_includes($gen) as $li) echo '<li>' . esc_html($li) . '</li>';
     echo '</ul></div><div class="stack"><div class="box"><h3>Humor, nie dokument</h3><p>Treści i tytuły są wymyślone dla zabawy. Produkt nie udaje żadnego prawdziwego dokumentu ani instytucji.</p></div>';

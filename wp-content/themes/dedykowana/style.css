@@ -248,3 +248,4 @@ body:not(.woocommerce-page) .site-main article h2{font-size:1.4rem;margin-top:1.
 .flow-mini figcaption{padding:8px 10px;font-weight:700;font-size:.85rem;background:#fff;border-top:2px solid var(--line)}
 .flow-mini span{font:800 2rem var(--head);text-align:center}
 @media(max-width:900px){.flow{grid-template-columns:1fr}.flow-arrow{transform:rotate(90deg)}.flow-mini{grid-template-columns:1fr 28px 1fr}}
+.poem-ex{margin:0 0 14px;padding:14px 18px;border-left:4px solid var(--violet);background:var(--paper);font-family:Georgia,"DejaVu Serif",serif;font-size:1.02rem;line-height:1.6}
