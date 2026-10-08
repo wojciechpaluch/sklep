@@ -68,11 +68,15 @@ add_action('admin_post_co_hero', function () {
         if (!$sp) $back(['err' => 'Nie udało się zrobić wersji „po".']);
         ob_start(); imagejpeg($sp, null, 92); $after_jpeg = ob_get_clean();
     }
+    $keep = co_private_dir() . '/example-photo.jpg'; // źródło dla przykładów produktów
+    file_put_contents($keep, $before_jpeg);
+    update_option('co_example_photo_file', $keep);
     $id1 = co_sample_image(0, 'hero-before.jpg', $before_jpeg, 'Przykład: przed');
     $id2 = co_sample_image(0, 'hero-after.jpg', $after_jpeg, 'Przykład: po');
     if (!$id1 || !$id2) $back(['err' => 'Nie udało się zapisać obrazów w mediach.']);
     set_theme_mod('dedykowana_hero_before', $id1); set_theme_mod('dedykowana_hero_after', $id2);
     set_theme_mod('dedykowana_cap_before', sanitize_text_field(wp_unslash($_POST['cap_before'] ?? 'Zdjęcie')));
     set_theme_mod('dedykowana_cap_after', sanitize_text_field(wp_unslash($_POST['cap_after'] ?? 'Postać z gry 2D')));
+    co_refresh_samples(); // wszystkie produkty dostają przykład z tego samego zdjęcia
     $back(['saved' => 1]);
 });

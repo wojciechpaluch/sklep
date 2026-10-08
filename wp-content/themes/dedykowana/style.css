@@ -1,7 +1,7 @@
 /*
 Theme Name: Dedykowana
 Description: Motyw WooCommerce dla sklepu z personalizowanymi produktami cyfrowymi. Układ: bananowa żółć, grube obrysy, kremowe tło.
-Version: 2.0.1
+Version: 2.1.0
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: dedykowana
@@ -231,3 +231,20 @@ body:not(.woocommerce-page) .site-main article h2{font-size:1.4rem;margin-top:1.
 .woocommerce ul.products li.product:nth-child(6) a.button{background:var(--yellow);color:var(--ink)}
 .woocommerce ul.order_details li,.woocommerce ul.order_details li.method{border:2px solid var(--line)!important;background:#fff}
 .woocommerce-order-details table a{color:var(--ink);font-weight:700}
+
+/* z jednego zdjęcia */
+.flow{display:grid;grid-template-columns:minmax(0,300px) 48px minmax(0,1fr);gap:20px;align-items:center}
+.flow figure{margin:0;background:#fff;border:2px solid var(--line);border-radius:16px;overflow:hidden}
+.flow figure img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:var(--sand)}
+.flow-src img{object-fit:cover}
+.flow figcaption{padding:10px 12px;font-weight:700;font-size:.9rem;border-top:2px solid var(--line)}
+.flow-arrow{font:800 2.4rem var(--head);text-align:center}
+.flow-outs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.co-extra .flow-box{grid-column:1/-1}
+.flow-mini{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1.4fr);gap:14px;align-items:center;max-width:760px}
+.flow-mini figure{margin:0;border:2px solid var(--line);border-radius:14px;overflow:hidden;background:var(--sand)}
+.flow-mini img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain}
+.flow-mini figure:first-child img{object-fit:cover}
+.flow-mini figcaption{padding:8px 10px;font-weight:700;font-size:.85rem;background:#fff;border-top:2px solid var(--line)}
+.flow-mini span{font:800 2rem var(--head);text-align:center}
+@media(max-width:900px){.flow{grid-template-columns:1fr}.flow-arrow{transform:rotate(90deg)}.flow-mini{grid-template-columns:1fr 28px 1fr}}

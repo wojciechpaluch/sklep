@@ -37,16 +37,21 @@ $from   = $price ? wc_price($price[0]->get_price()) : '';
 </div></section>
 
 <?php
-$ex = function_exists('wc_get_products') ? wc_get_products(['status' => 'publish', 'limit' => 4, 'orderby' => 'menu_order', 'order' => 'ASC', 'return' => 'objects']) : [];
-if ($ex) : ?>
+$outs = get_posts(['post_type' => 'product', 'post_status' => 'publish', 'numberposts' => 4, 'orderby' => 'menu_order', 'order' => 'ASC',
+    'meta_query' => [['key' => '_co_generator', 'value' => ['pet_card', 'trading_card', 'wanted', 'pixel_pet'], 'compare' => 'IN']]]);
+if ($before && $outs) : ?>
 <section class="section"><div class="wrap">
-  <h2>Przykłady</h2>
-  <div class="examples">
-    <?php foreach ($ex as $p) : ?>
-      <figure><a href="<?php echo esc_url(get_permalink($p->get_id())); ?>"><?php echo $p->get_image('large'); ?></a><figcaption><?php echo esc_html($p->get_name()); ?></figcaption></figure>
-    <?php endforeach; ?>
+  <h2>Z jednego zdjęcia kilka rzeczy</h2>
+  <div class="flow">
+    <figure class="flow-src"><?php echo wp_get_attachment_image($before, 'large'); ?><figcaption>Twoje zdjęcie</figcaption></figure>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-outs">
+      <?php foreach ($outs as $o) : $pp = wc_get_product($o->ID); ?>
+        <figure><a href="<?php echo esc_url(get_permalink($o->ID)); ?>"><?php echo $pp->get_image('large'); ?></a><figcaption><?php echo esc_html($pp->get_name()); ?> · <?php echo wp_kses_post($pp->get_price_html()); ?></figcaption></figure>
+      <?php endforeach; ?>
+    </div>
   </div>
-  <p class="fine">To przykłady wykonane na zdjęciu poglądowym. Realizacje klientów pokazujemy tylko za ich zgodą.</p>
+  <p class="fine">Przykłady są zrobione na tym samym zdjęciu. Dyplom, legitymacja, karta, list gończy i postać z gry 2D powstają automatycznie, bez AI, a tekst wierszyka możemy przygotować z pomocą AI i zawsze sprawdzamy go przed wysyłką.</p>
 </div></section>
 <?php endif; ?>
 

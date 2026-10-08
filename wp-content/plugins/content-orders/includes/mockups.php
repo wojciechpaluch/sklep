@@ -3,6 +3,8 @@ if (!defined('ABSPATH')) exit;
 
 /* Przykładowe "zdjęcie" zwierzaka: narysowany pies (do podglądów produktów, gdy klient nie dodał zdjęcia). */
 function co_sample_pet_photo_path() {
+    $real = get_option('co_example_photo_file');
+    if ($real && is_file($real)) return $real; // prawdziwe zdjęcie wgrane w panelu (Zlecenia → Przykład przed/po)
     $path = trailingslashit(sys_get_temp_dir()) . 'co-sample-dog.jpg';
     if (is_file($path)) return $path;
     $S = 2; $W = 800 * $S;
@@ -110,12 +112,12 @@ function co_refresh_samples() {
     $products = get_option('co_products', []);
     $dog = co_sample_pet_photo_path();
     $jobs = [
-        'diploma' => function () { list($j) = co_render_diploma('Anna Kowalska', 'Królowa Kanapy', co_diploma_titles()['Królowa Kanapy'], 1600, false); return [$j, 'dyplom-przyklad.jpg', 'Przykładowy dyplom', 0.86]; },
-        'pet'     => function () use ($dog) { return [co_render_pet_card($dog, 'Burek', 'Pies', co_pet_roles()[0], co_pet_default_trait('Pies'), 1400, false), 'legitymacja-przyklad.jpg', 'Przykładowa legitymacja zwierzaka', 0.86]; },
+        'diploma' => function () use ($dog) { $t = 'Mistrz Spóźnialskich'; list($j) = co_render_diploma('Bruno', $t, co_diploma_titles()[$t], 1600, false, get_option('co_example_photo_file') ? $dog : null); return [$j, 'dyplom-przyklad.jpg', 'Przykładowy dyplom', 0.86]; },
+        'pet'     => function () use ($dog) { return [co_render_pet_card($dog, 'Bruno', 'Pies', co_pet_roles()[0], co_pet_default_trait('Pies'), 1400, false), 'legitymacja-przyklad.jpg', 'Przykładowa legitymacja zwierzaka', 0.86]; },
         'poem'    => function () { return [co_render_sample_poem(1200), 'wierszyk-przyklad.jpg', 'Przykładowy wierszyk', 0.82]; },
-        'pixel'   => function () use ($dog) { return [co_render_pixel($dog, 'Burek', co_pixel_classes()[0], co_pixel_skills()[0], 1200, false), 'pixel-przyklad.jpg', 'Przykładowa postać z gry 2D', 0.9]; },
-        'wanted'  => function () use ($dog) { return [co_render_wanted($dog, 'Burek', co_wanted_crimes()[0], co_wanted_rewards()[0], 1000, false), 'list-goncz-przyklad.jpg', 'Przykładowy list gończy', 0.9]; },
-        'card'    => function () use ($dog) { return [co_render_card($dog, 'Burek', 'Ogień', co_card_attacks()[0], 1000, false), 'karta-przyklad.jpg', 'Przykładowa karta kolekcjonerska', 0.9]; },
+        'pixel'   => function () use ($dog) { return [co_render_pixel($dog, 'Bruno', co_pixel_classes()[0], co_pixel_skills()[0], 1200, false), 'pixel-przyklad.jpg', 'Przykładowa postać z gry 2D', 0.9]; },
+        'wanted'  => function () use ($dog) { return [co_render_wanted($dog, 'Bruno', co_wanted_crimes()[0], co_wanted_rewards()[0], 1000, false), 'list-goncz-przyklad.jpg', 'Przykładowy list gończy', 0.9]; },
+        'card'    => function () use ($dog) { return [co_render_card($dog, 'Bruno', 'Ogień', co_card_attacks()[0], 1000, false), 'karta-przyklad.jpg', 'Przykładowa karta kolekcjonerska', 0.9]; },
     ];
     foreach ($jobs as $key => $fn) {
         if (empty($products[$key])) continue;

@@ -59,7 +59,12 @@ add_action('woocommerce_after_single_product_summary', function () {
     global $product; if (!$product) return;
     $gen = get_post_meta($product->get_id(), '_co_generator', true);
     $terms = function_exists('wc_terms_and_conditions_page_id') ? get_permalink(wc_terms_and_conditions_page_id()) : '#';
-    echo '<div class="co-extra"><div class="box"><h3>Co dostajesz</h3><ul>';
+    $before = (int) get_theme_mod('dedykowana_hero_before');
+    echo '<div class="co-extra">';
+    if ($before && in_array($gen, ['pet_card', 'trading_card', 'wanted', 'pixel_pet', 'diploma'], true) && $product->get_image_id()) {
+        echo '<div class="box flow-box"><h3>Jak to powstaje</h3><div class="flow-mini"><figure>' . wp_get_attachment_image($before, 'medium') . '<figcaption>Zdjęcie</figcaption></figure><span aria-hidden="true">→</span><figure>' . wp_get_attachment_image($product->get_image_id(), 'medium') . '<figcaption>' . esc_html($product->get_name()) . '</figcaption></figure></div><p>' . ($gen === 'diploma' ? 'Zdjęcie jest opcjonalne i trafia na pieczęć dyplomu.' : 'Zdjęcie jest kadrowane przez Ciebie, a potem generowane automatycznie przez kod, bez AI.') . ' Przykład wykonany na zdjęciu poglądowym.</p></div>';
+    }
+    echo '<div class="box"><h3>Co dostajesz</h3><ul>';
     foreach (dedykowana_product_includes($gen) as $li) echo '<li>' . esc_html($li) . '</li>';
     echo '</ul></div><div class="stack"><div class="box"><h3>Humor, nie dokument</h3><p>Treści i tytuły są wymyślone dla zabawy. Produkt nie udaje żadnego prawdziwego dokumentu ani instytucji.</p></div>';
     echo '<div class="box"><h3>Zwroty i reklamacje</h3><p>To produkt robiony specjalnie dla Ciebie, więc po rozpoczęciu realizacji nie można od umowy odstąpić. Jeśli jest literówka albo zły plik, poprawiamy to. <a href="' . esc_url($terms) . '">Pełne zasady</a></p></div></div></div>';
